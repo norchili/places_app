@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "3808097199",
+    "project_id": "tripsflutter-f0a27",
+    "storage_bucket": "tripsflutter-f0a27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3808097199:android:6c0590b77ff071e876355a",
+        "android_client_info": {
+          "package_name": "com.example.places_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3808097199-1gao4alpf4q8s3dt5oi30k3d7mbmifc5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.places_app",
+            "certificate_hash": "af15d0dbc91aa2bf38c6197f12e7f05ea7a23aaf"
+          }
+        },
+        {
+          "client_id": "3808097199-3g5sjomuh0a6vn006pkdhp9t1821m5qd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC19feqUEDyvZKWIrpy50FMyS-GvH-_j6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3808097199-3g5sjomuh0a6vn006pkdhp9t1821m5qd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
