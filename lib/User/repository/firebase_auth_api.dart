@@ -5,6 +5,7 @@ class FirebaseAuthAPI {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
+  //Metodo para inciar sesion primero en Google y luego en firebase
   Future<UserCredential?> signIn() async {
     GoogleSignInAccount? googleSignInAccount;
 
@@ -50,5 +51,13 @@ class FirebaseAuthAPI {
       }
     } else
       return null;
+  }
+
+  //Metodo para cerrar la sesion en Firebase y Google
+  signOut() async {
+    await googleSignIn
+        .signOut()
+        .then((value) => print("Sesion de Google cerrada"));
+    await _auth.signOut().then((value) => print("Sesión de Firebase Cerrada"));
   }
 }
