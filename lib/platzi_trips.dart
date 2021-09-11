@@ -35,11 +35,9 @@ class _PlatziTrips extends State<PlatziTrips> {
             onTap: onTapTapped,
             currentIndex: indexTap,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.search), title: Text("")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person), title: Text("")),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
             ]),
       ),
     );

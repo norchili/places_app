@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:places_app/widgets/button_purple.dart';
 
 class DescriptionPlace extends StatelessWidget {
-  String namePlace;
-  int stars;
-  String descriptionPlace;
+  late final String namePlace;
+  late final int stars;
+  late final String descriptionPlace;
 
   DescriptionPlace(this.namePlace, this.stars, this.descriptionPlace);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     final starHalf = Container(
       margin: EdgeInsets.only(top: 353.0, right: 3.0),
       child: Icon(

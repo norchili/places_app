@@ -3,8 +3,8 @@ import 'package:places_app/Place/model/place.dart';
 import 'profile_place_info.dart';
 
 class ProfilePlace extends StatelessWidget {
-  String image;
-  Place place;
+  final String image;
+  final Place place;
 
   ProfilePlace(this.image, this.place);
 

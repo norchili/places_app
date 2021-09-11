@@ -1,14 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'platzi_trips_cupertino.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:places_app/User/bloc/bloc_user.dart';
+import 'package:places_app/User/ui/screens/sign_in_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp().then((value) {
+    runApp(MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Demo', home: PlatziTripsCupertino());
+    return BlocProvider(
+        child: MaterialApp(title: 'Flutter Demo', home: SignInScreen()),
+        bloc: UserBloc());
   }
 }
 
@@ -83,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.subtitle1,
             ),
           ],
         ),

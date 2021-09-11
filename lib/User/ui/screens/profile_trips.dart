@@ -6,7 +6,6 @@ import 'package:places_app/User/ui/widgets/profile_places_list.dart';
 class ProfileTrips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     /*return Container(
       color: Colors.indigo,
     );*/

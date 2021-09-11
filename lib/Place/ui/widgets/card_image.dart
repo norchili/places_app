@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:places_app/widgets/floating_action_button_green.dart';
 
 class CardImage extends StatelessWidget {
-  String pathImage = "assets/img/beach.jpeg";
+  late final String pathImage;
 
   CardImage(this.pathImage);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     final card = Container(
       height: 350.0,
       width: 250.0,

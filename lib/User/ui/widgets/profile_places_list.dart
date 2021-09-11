@@ -3,12 +3,12 @@ import 'package:places_app/Place/model/place.dart';
 import 'profile_place.dart';
 
 class ProfilePlacesList extends StatelessWidget {
-  Place place = new Place(
+  final Place place = new Place(
       'Knuckles Mountains Range',
       'Hiking. Water fall hunting. Natural bath',
       'Scenery & Photography',
       '123,123,123');
-  Place place2 = new Place(
+  final Place place2 = new Place(
       'Mountains',
       'Hiking. Water fall hunting. Natural bath',
       'Scenery & Photography',
