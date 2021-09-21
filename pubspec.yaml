@@ -65,6 +65,9 @@ flutter:
       - assets/img/people.jpg
       - assets/img/river.jpeg
       - assets/img/sunset.jpeg
+      - assets/img/creel.jpg
+      - assets/img/bacalar.jpg
+      - assets/img/san_cristobal_de_las_casas.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

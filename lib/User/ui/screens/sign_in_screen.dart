@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:places_app/User/bloc/bloc_user.dart';
+import 'package:places_app/User/model/user.dart';
 import 'package:places_app/platzi_trips_cupertino.dart';
 import 'package:places_app/widgets/button_green.dart';
 import 'package:places_app/widgets/gradient_back.dart';
@@ -58,9 +59,13 @@ class _SignInScreen extends State<SignInScreen> {
                 text: "Login with Gmail",
                 onPressed: () {
                   userBloc.signOut();
-                  userBloc.signIn().then((value) => print(value != null
-                      ? "El usuario es: ${value.user!.displayName}"
-                      : "Usuario vacio, vuelve a intentarlo")); //El codigo se termina hasta antes del .then, pero esto se hace para depuracion en caso de falla
+                  userBloc.signIn().then((value) {
+                    userBloc.updateUserData(User(
+                        userId: value!.user!.uid.toString(),
+                        name: value.user!.displayName.toString(),
+                        email: value.user!.email.toString(),
+                        photoURL: value.user!.photoURL.toString()));
+                  }); //El codigo se termina hasta antes del .then, pero esto se hace para depuracion en caso de falla
                 },
                 width: 300.0,
                 height: 50.0,

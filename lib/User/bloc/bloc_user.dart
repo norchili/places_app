@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:places_app/User/model/user.dart' as userModel;
 import 'package:places_app/User/repository/auth_repository.dart';
+import 'package:places_app/User/repository/cloud_firestore_repository.dart';
 
 class UserBloc implements Bloc {
   final _authRepository = AuthRepository();
@@ -23,6 +25,12 @@ class UserBloc implements Bloc {
   signOut() {
     _authRepository.signOut();
   }
+
+  //Caso de uso
+  //Registrar Usuario en Base de datos de Firestore
+  final _cloudFirestoreRepository = CloudFirestoreRepository();
+  void updateUserData(userModel.User user) =>
+      _cloudFirestoreRepository.updateUserDataFirestore(user);
 
   @override
   void dispose() {}
