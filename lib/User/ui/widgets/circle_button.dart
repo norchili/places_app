@@ -28,6 +28,7 @@ class _CircleButton extends State<CircleButton> {
   Widget build(BuildContext context) {
     return Expanded(
         child: FloatingActionButton(
+      heroTag: null,
       backgroundColor: widget.color,
       mini: widget.mini,
       onPressed: widget.onPressed,

@@ -27,7 +27,7 @@ class UserBloc implements Bloc {
   }
 
   //Caso de uso
-  //Registrar Usuario en Base de datos de Firestore
+  //Registrar Usuario si no existe o actualizar Usuario si existe en Base de datos de Firestore
   final _cloudFirestoreRepository = CloudFirestoreRepository();
   void updateUserData(userModel.User user) =>
       _cloudFirestoreRepository.updateUserDataFirestore(user);

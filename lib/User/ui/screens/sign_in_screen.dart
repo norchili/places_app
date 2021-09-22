@@ -7,6 +7,8 @@ import 'package:places_app/widgets/button_green.dart';
 import 'package:places_app/widgets/gradient_back.dart';
 
 class SignInScreen extends StatefulWidget {
+  late final UserBloc userBloc;
+  late double screenWidht;
   @override
   State<StatefulWidget> createState() {
     return _SignInScreen();
@@ -14,11 +16,12 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreen extends State<SignInScreen> {
-  late UserBloc userBloc;
-
   @override
   Widget build(BuildContext context) {
-    userBloc = BlocProvider.of(context);
+    widget.userBloc = BlocProvider.of(context);
+    widget.screenWidht = MediaQuery.of(context)
+        .size
+        .width; //Obtenemos el tamaño exacto de la pantalla del movil
     return _handleCurrentSession();
   }
 
@@ -26,7 +29,7 @@ class _SignInScreen extends State<SignInScreen> {
   //en base a si está o no autenticado con google
   Widget _handleCurrentSession() {
     return StreamBuilder(
-        stream: userBloc
+        stream: widget.userBloc
             .authStatus, //Solicitamos conocer el estatus de la sesion de Firebase
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           //snapshot contiene nuestro objeto User de Firebase
@@ -43,24 +46,26 @@ class _SignInScreen extends State<SignInScreen> {
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          GradientBack("", double.infinity),
+          GradientBack(height: null),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: Text("Welcome. \nThis is your Travel App",
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          fontFamily: "Lato",
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold))),
+              Flexible(
+                  child: Container(
+                      width: widget.screenWidht,
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Text("Welcome. \nThis is your Travel App",
+                          style: TextStyle(
+                              fontSize: 30.0,
+                              fontFamily: "Lato",
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)))),
               ButtonGreen(
                 text: "Login with Gmail",
                 onPressed: () {
-                  userBloc.signOut();
-                  userBloc.signIn().then((value) {
-                    userBloc.updateUserData(User(
+                  widget.userBloc.signOut();
+                  widget.userBloc.signIn().then((value) {
+                    widget.userBloc.updateUserData(User(
                         userId: value!.user!.uid.toString(),
                         name: value.user!.displayName.toString(),
                         email: value.user!.email.toString(),

@@ -6,15 +6,15 @@ import 'package:places_app/User/ui/widgets/button_bar.dart';
 import 'package:places_app/User/ui/widgets/user_info.dart';
 
 class ProfileHeader extends StatelessWidget {
-  late final UserBloc userBloc;
-  late final User user;
+  UserBloc? userBloc;
+  User? user;
 
   @override
   Widget build(BuildContext context) {
-    userBloc = BlocProvider.of<UserBloc>(context);
+    userBloc = BlocProvider.of(context);
 
     return StreamBuilder(
-        stream: userBloc.streamFirebase,
+        stream: userBloc!.authStatus,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -65,7 +65,7 @@ class ProfileHeader extends StatelessWidget {
             Row(
               children: <Widget>[title],
             ),
-            UserInfo(user),
+            UserInfo(user!),
             ButtonsBar()
           ],
         ),
