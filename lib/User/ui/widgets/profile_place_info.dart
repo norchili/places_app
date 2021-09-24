@@ -31,7 +31,8 @@ class ProfilePlaceInfo extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                this.place.category,
+                // Si categoria de Place no es null devuelve categoria, de lo contrario agrega "" osease espacio
+                this.place.category ?? "",
                 style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 0.4),
                     fontFamily: 'Lato',
@@ -70,7 +71,13 @@ class ProfilePlaceInfo extends StatelessWidget {
 
     return Stack(
       alignment: Alignment(0.8, 1.25),
-      children: <Widget>[card, FloatingActionButtonGreen()],
+      children: <Widget>[
+        card,
+        FloatingActionButtonGreen(
+          iconData: Icons.favorite_border_outlined,
+          onPressed: () {},
+        )
+      ],
     );
   }
 }

@@ -6,6 +6,7 @@ class HeaderAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.topCenter,
       children: <Widget>[
         GradientBack(title: "Bienvenido", height: 250.0),
         CardImageList()

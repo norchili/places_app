@@ -7,7 +7,7 @@ class Place {
   final String description;
   final String urlImage;
   final int? likes;
-  final String category;
+  final String? category;
 
   final User? userOwner;
 
@@ -15,9 +15,9 @@ class Place {
       {Key? key,
       this.id,
       this.likes,
-      required this.category,
+      this.category,
       required this.name,
       required this.description,
-      required this.urlImage,
+      this.urlImage = "https://imgur.com/eJsTDCs",
       this.userOwner});
 }

@@ -1,6 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:places_app/Place/model/place.dart';
+import 'package:places_app/Place/ui/widgets/card_image.dart';
+import 'package:places_app/Place/ui/widgets/title_input_location.dart';
+import 'package:places_app/User/bloc/bloc_user.dart';
+import 'package:places_app/widgets/button_purple.dart';
 import 'package:places_app/widgets/gradient_back.dart';
 import 'package:places_app/widgets/text_input.dart';
 import 'package:places_app/widgets/title_header.dart';
@@ -17,17 +23,17 @@ class AddPlaceScreen extends StatefulWidget {
 }
 
 class _AddPlaceScreen extends State<AddPlaceScreen> {
+  final _controllerTitlePlace = TextEditingController();
+  final _controlleDescriptionPlace = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final _controllerTitlePlace = TextEditingController();
-    final _controlleDescriptionPlace = TextEditingController();
-
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
     return Scaffold(
       body: Stack(
         children: <Widget>[
           GradientBack(height: 300.0),
+          //App Bar
           Row(
-            //App Bar
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
@@ -49,15 +55,25 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
               ))
             ],
           ),
+          //Widgets debajo del AppBar
           Container(
-            margin: EdgeInsets.only(top: 120.0, bottom: 20.0),
+            margin: EdgeInsets.only(top: 100.0, bottom: 20.0),
             child: ListView(
               children: <Widget>[
-                Container(), // Foto del Place
                 Container(
-                  margin: EdgeInsets.only(bottom: 20.0),
+                    alignment: Alignment.center,
+                    child: CardImageWithFabIcon(
+                        pathImage:
+                            "assets/img/bacalar.jpg", //widget.image.path,
+                        height: 250.0,
+                        width: 350,
+                        onPressedFabIcon: () {},
+                        iconData:
+                            Icons.camera_enhance_outlined)), // Foto del Place
+                Container(
+                  margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
                   child: TextInput(
-                    fontSize: 15.0,
+                    fontSize: 16.0,
                     hintText: "Title",
                     inputType: null,
                     controller: _controllerTitlePlace,
@@ -65,11 +81,39 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
                   ),
                 ),
                 TextInput(
-                  fontSize: 12.0,
+                  fontSize: 14.0,
                   hintText: "Description",
                   inputType: TextInputType.multiline,
                   controller: _controlleDescriptionPlace,
                   maxLines: 4,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  child: TextInputLocation(
+                      hintText: "Add Location",
+                      fontSize: 14.0,
+                      iconData: Icons.location_on_outlined),
+                ),
+                Container(
+                  //width: 70.0,
+                  height: 90.0,
+                  child: ButtonPurple(
+                      buttonText: "Add Place",
+                      onPressed: () {
+                        //1. FirebaseStorage
+                        //Nos devuelve una Url
+                        //2. Enviamos la url, el titulo, descripcion, userOwner, likes al CloudFirestore
+                        userBloc
+                            .updateUserPlaceData(Place(
+                                name: _controllerTitlePlace.text,
+                                description: _controlleDescriptionPlace.text,
+                                likes: 0))
+                            .whenComplete(() {
+                          print(
+                              "Terminó de agregar datos de Place en CloudFirestore");
+                          Navigator.pop(context);
+                        });
+                      }),
                 )
               ],
             ),

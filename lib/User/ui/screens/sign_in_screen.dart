@@ -7,8 +7,8 @@ import 'package:places_app/widgets/button_green.dart';
 import 'package:places_app/widgets/gradient_back.dart';
 
 class SignInScreen extends StatefulWidget {
-  late final UserBloc userBloc;
-  late double screenWidht;
+  UserBloc? userBloc;
+  double? screenWidht;
   @override
   State<StatefulWidget> createState() {
     return _SignInScreen();
@@ -29,7 +29,7 @@ class _SignInScreen extends State<SignInScreen> {
   //en base a si está o no autenticado con google
   Widget _handleCurrentSession() {
     return StreamBuilder(
-        stream: widget.userBloc
+        stream: widget.userBloc!
             .authStatus, //Solicitamos conocer el estatus de la sesion de Firebase
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           //snapshot contiene nuestro objeto User de Firebase
@@ -63,9 +63,9 @@ class _SignInScreen extends State<SignInScreen> {
               ButtonGreen(
                 text: "Login with Gmail",
                 onPressed: () {
-                  widget.userBloc.signOut();
-                  widget.userBloc.signIn().then((value) {
-                    widget.userBloc.updateUserData(User(
+                  widget.userBloc!.signOut();
+                  widget.userBloc!.signIn().then((value) {
+                    widget.userBloc!.updateUserData(User(
                         userId: value!.user!.uid.toString(),
                         name: value.user!.displayName.toString(),
                         email: value.user!.email.toString(),
