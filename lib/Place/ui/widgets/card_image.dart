@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:places_app/widgets/floating_action_button_green.dart';
 
@@ -22,6 +24,13 @@ class CardImageWithFabIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider<Object> image;
+    //Selleciona que tipo de imagen se va a mostrar. local, de camara, de internet
+    if (pathImage.contains("assets")) {
+      image = AssetImage(pathImage);
+    } else
+      image = FileImage(File(pathImage));
+
     final card = Container(
         alignment: Alignment.center,
         child: Container(
@@ -29,8 +38,7 @@ class CardImageWithFabIcon extends StatelessWidget {
           width: width,
           margin: EdgeInsets.only(left: marginLeft, right: marginRight),
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.cover, image: AssetImage(pathImage)),
+              image: DecorationImage(fit: BoxFit.cover, image: image),
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
               shape: BoxShape.rectangle,
               boxShadow: <BoxShadow>[

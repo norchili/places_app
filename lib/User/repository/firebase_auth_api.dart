@@ -53,6 +53,11 @@ class FirebaseAuthAPI {
       return null;
   }
 
+  //Metodo para obtener el usuario actualmente logueado
+  Future<User?> currentUser() async {
+    return _auth.currentUser;
+  }
+
   //Metodo para cerrar la sesion en Firebase y Google
   signOut() async {
     await googleSignIn

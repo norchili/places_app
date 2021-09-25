@@ -38,7 +38,8 @@ class CloudFirestoreApi {
         'name': place.name,
         'description': place.description,
         'likes': place.likes,
-        'userOwner': "$USERS/${currentUser.uid}"
+        'userOwner': "$USERS/${currentUser.uid}",
+        'urlImage': place.urlImage
       });
     } else
       print("No hay usuario logueado");

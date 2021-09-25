@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:places_app/Place/ui/screens/add_place_screen.dart';
 import 'package:places_app/User/bloc/bloc_user.dart';
 import 'circle_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ButtonsBar extends StatelessWidget {
   late final UserBloc userBloc;
@@ -29,10 +32,16 @@ class ButtonsBar extends StatelessWidget {
                 color: Color.fromRGBO(255, 255, 255, 1),
                 onPressed: () {
                   //File image;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => AddPlaceScreen()));
+                  ImagePicker _picker = ImagePicker();
+                  _picker.pickImage(source: ImageSource.camera).then((image) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AddPlaceScreen(image: File(image!.path))));
+                  }).catchError((onError) {
+                    print("Error al tomar la foto: $onError");
+                  });
                 }),
             CircleButton(
                 mini: true,
