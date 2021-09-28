@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
@@ -7,11 +8,14 @@ import 'package:places_app/Place/model/place.dart';
 import 'package:places_app/Place/repository/firebase_storage_repository.dart';
 import 'package:places_app/User/model/user.dart' as userModel;
 import 'package:places_app/User/repository/auth_repository.dart';
+import 'package:places_app/User/repository/cloud_firestore_api.dart';
 import 'package:places_app/User/repository/cloud_firestore_repository.dart';
+import 'package:places_app/User/ui/widgets/profile_place.dart';
 
 class UserBloc implements Bloc {
   final _authRepository = AuthRepository();
   final _firebaseStorageRepository = FirebaseStorageRepository();
+  final _cloudFirestoreRepository = CloudFirestoreRepository();
 
   //Flujo de datos - Stream
   //Stream - Firebase
@@ -38,7 +42,6 @@ class UserBloc implements Bloc {
 
   //Caso de uso
   //Registrar Usuario si no existe o actualizar Usuario si existe en Base de datos de Firestore
-  final _cloudFirestoreRepository = CloudFirestoreRepository();
 
   void updateUserData(userModel.User user) =>
       _cloudFirestoreRepository.updateUserDataFirestore(user);
@@ -46,7 +49,23 @@ class UserBloc implements Bloc {
   Future<void> updateUserPlaceData(Place place) =>
       _cloudFirestoreRepository.updateUserPlaceData(place);
 
-  //Guardar imagen en la FirebaseStorage
+  //Metodo para construir lista de Places despues de haber obtenido los datos de Plaes de CloudFirestore
+  List<ProfilePlace> buildPlaces(List<DocumentSnapshot> placesListSnapshot) =>
+      _cloudFirestoreRepository.buildPlaces(placesListSnapshot);
+
+  //Metoso para agregar un listener de escucha ante cualquier cambio en la
+  //colecion de PLACES
+  Stream<QuerySnapshot> placesListStream = FirebaseFirestore.instance
+      .collection(CloudFirestoreApi().getPLACES())
+      .snapshots();
+  Stream<QuerySnapshot> get placesStream =>
+      placesListStream; //el metodo get siempre va despues de haber declarado un Stream
+
+  //Metodo para seleccionar solo los PLaces del usuario logueado
+  Stream<QuerySnapshot<Map<String, dynamic>>> myPlacesListStream(String uid) =>
+      _cloudFirestoreRepository.myPlacesListStream(uid);
+
+  //Metodo para Guardar imagen en la FirebaseStorage
   Future<UploadTask> uploadFile(String path, File image) =>
       _firebaseStorageRepository.uploadFile(path, image);
 

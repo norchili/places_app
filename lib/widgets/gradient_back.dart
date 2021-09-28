@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class GradientBack extends StatelessWidget {
   final String? title;
-  double? height;
+  final double? height;
 
   GradientBack({Key? key, this.title, required this.height});
 
@@ -11,15 +11,17 @@ class GradientBack extends StatelessWidget {
     //variable para obtener la altura de cualquier pantalla de un celular
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidht = MediaQuery.of(context).size.width;
+    double? _height;
 
+    //Establecemos si la altura del gradiente es fullscreeen o alguna medida en particular
     if (height == null) {
-      height =
-          screenHeight; //Establecemo si la altura del gradiente es fullscreeen o alguna medida en particular
-    }
+      _height = screenHeight;
+    } else
+      _height = height;
 
     return Container(
       width: screenWidht,
-      height: height,
+      height: _height,
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [Color(0xFF4268D3), Color(0xFF584CD1)],

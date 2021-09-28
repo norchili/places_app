@@ -33,7 +33,13 @@ class ButtonsBar extends StatelessWidget {
                 onPressed: () {
                   //File image;
                   ImagePicker _picker = ImagePicker();
-                  _picker.pickImage(source: ImageSource.camera).then((image) {
+                  _picker
+                      .pickImage(
+                          source: ImageSource.camera,
+                          maxHeight: 720.0,
+                          maxWidth: 1280.0,
+                          imageQuality: 60)
+                      .then((image) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(

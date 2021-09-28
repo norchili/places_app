@@ -42,10 +42,10 @@ class ProfilePlaceInfo extends StatelessWidget {
             ]));
 
     final steps = Text(
-      'Heart ${this.place.likes}',
+      'Likes ${this.place.likes}',
       style: TextStyle(
           fontFamily: 'Lato',
-          fontSize: 14.0,
+          fontSize: 12.0,
           fontWeight: FontWeight.bold,
           color: Colors.amber),
     );

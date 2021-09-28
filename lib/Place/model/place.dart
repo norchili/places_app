@@ -1,4 +1,3 @@
-import 'package:places_app/User/model/user.dart';
 import 'package:flutter/material.dart';
 
 class Place {
@@ -9,15 +8,16 @@ class Place {
   final int? likes;
   final String? category;
 
-  final User? userOwner;
+  //final User? userOwner;
 
-  Place(
-      {Key? key,
-      this.id,
-      this.likes,
-      this.category,
-      required this.name,
-      required this.description,
-      this.urlImage = "https://imgur.com/eJsTDCs",
-      this.userOwner});
+  Place({
+    Key? key,
+    this.id,
+    this.likes,
+    this.category,
+    required this.name,
+    required this.description,
+    this.urlImage = "https://imgur.com/eJsTDCs",
+    //this.userOwner
+  });
 }

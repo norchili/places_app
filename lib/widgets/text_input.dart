@@ -6,7 +6,7 @@ class TextInput extends StatelessWidget {
   final TextInputType?
       inputType; //variable para capturar el tipo de dato a introducir
   final TextEditingController controller;
-  int? maxLines = 1;
+  final int maxLines;
 
   TextInput(
       {Key? key,
@@ -14,7 +14,7 @@ class TextInput extends StatelessWidget {
       required this.hintText,
       required this.inputType,
       required this.controller,
-      this.maxLines});
+      this.maxLines = 1});
   @override
   Widget build(BuildContext context) {
     return Container(

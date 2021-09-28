@@ -1,43 +1,79 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:places_app/Place/model/place.dart';
-import 'profile_place.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:places_app/User/bloc/bloc_user.dart';
+import 'package:places_app/User/model/user.dart';
 
 class ProfilePlacesList extends StatelessWidget {
-  final Place bacalar = new Place(
-      urlImage: "assets/img/bacalar.jpg",
-      name: "Bacalar, Quintana Roo",
-      description:
-          "Lagoon, stories of pirates, temples and architecture of Mayan, Blue Cenote, snorkeling, diving, boat ride and swimming await you.",
-      likes: 345,
-      category: "Beach");
-
-  final Place creel = new Place(
-      urlImage: "assets/img/creel.jpg",
-      name: "Creel, Chihuahua",
-      description:
-          "Sierra Tarahumara. Forests, waterfalls, caves, nature, cable car, Rarámuri culture, magical town, wood art, the copper canyons.",
-      likes: 4586,
-      category: "Mountains");
-
-  final Place sanCristobalDeLasCasas = new Place(
-      urlImage: "assets/img/san_cristobal_de_las_casas.jpg",
-      name: "San Cristobal de las Casas, Chiapas",
-      description:
-          "It is among trees and dense evils and fresh mist, colonial buildings, traditions and festivals, squares, temples and buildings, Huitepec Reserve, El Arcotete, ecotourism park, Chanfaina and amaranth are part of its typical foods.",
-      likes: 978563,
-      category: "Selva");
+  final User user;
+  ProfilePlacesList({Key? key, required this.user});
 
   @override
   Widget build(BuildContext context) {
+    UserBloc userBloc;
+    userBloc = BlocProvider.of<UserBloc>(context);
     return Container(
       margin: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
-      child: Column(
-        children: <Widget>[
-          ProfilePlace(creel),
-          ProfilePlace(bacalar),
-          ProfilePlace(sanCristobalDeLasCasas)
-        ],
-      ),
+      child: StreamBuilder(
+          stream: userBloc.myPlacesListStream(user.userId!),
+          builder: (context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                    "Error al obtener el sanpshot de Places de CloudFirestore"),
+              );
+            }
+            //snapshot.data.docs.isEmpty
+
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return CircularProgressIndicator();
+
+              case ConnectionState.waiting:
+                return Center(child: Text("Loading..."));
+
+              case ConnectionState.active:
+                if (snapshot.data!.docs.isNotEmpty) {
+                  return Column(
+                    children: userBloc.buildPlaces(snapshot.data!.docs),
+                  );
+                } else {
+                  print("Active: Snapshot: ${snapshot.data!.docs}");
+                  return Center(
+                      child: Text(
+                          "Active: No tienes Places agregados aún, comienza agregando uno",
+                          maxLines: 2,
+                          textAlign: TextAlign.left));
+                }
+
+              case ConnectionState.done:
+                if (snapshot.data!.docs.isNotEmpty) {
+                  return Column(
+                    children: userBloc.buildPlaces(snapshot.data!.docs),
+                  );
+                } else {
+                  print("Snapshot: ${snapshot.data!.docs}");
+                  return Center(
+                      child: Text(
+                          "Done: No tienes Places agregados aún, comienza agregando uno",
+                          maxLines: 2,
+                          textAlign: TextAlign.left));
+                }
+
+              default:
+                if (snapshot.data!.docs.isNotEmpty) {
+                  return Column(
+                    children: userBloc.buildPlaces(snapshot.data!.docs),
+                  );
+                } else
+                  return Center(
+                      child: Text(
+                          "Default: No tienes Places agregados aún, comienza agregando uno",
+                          maxLines: 2,
+                          textAlign: TextAlign.left));
+            }
+          }),
     );
   }
 }
