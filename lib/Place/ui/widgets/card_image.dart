@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:places_app/widgets/floating_action_button_green.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CardImageWithFabIcon extends StatelessWidget {
   final String pathImage;
@@ -11,6 +12,7 @@ class CardImageWithFabIcon extends StatelessWidget {
   final double marginRight;
   final VoidCallback onPressedFabIcon;
   final IconData iconData;
+  final bool? internet;
 
   CardImageWithFabIcon(
       {Key? key,
@@ -20,7 +22,8 @@ class CardImageWithFabIcon extends StatelessWidget {
       required this.onPressedFabIcon,
       required this.iconData,
       this.marginLeft = 20.0,
-      this.marginRight = 20.0});
+      this.marginRight = 20.0,
+      this.internet});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,8 @@ class CardImageWithFabIcon extends StatelessWidget {
     //Selleciona que tipo de imagen se va a mostrar. local, de camara, de internet
     if (pathImage.contains("assets")) {
       image = AssetImage(pathImage);
+    } else if (pathImage.contains("https:")) {
+      image = new CachedNetworkImageProvider(pathImage);
     } else
       image = FileImage(File(pathImage));
 

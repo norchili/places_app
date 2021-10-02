@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:places_app/Place/model/place.dart';
 import 'package:places_app/Place/repository/firebase_storage_repository.dart';
+import 'package:places_app/Place/ui/widgets/card_image.dart';
 import 'package:places_app/User/model/user.dart' as userModel;
 import 'package:places_app/User/repository/auth_repository.dart';
 import 'package:places_app/User/repository/cloud_firestore_api.dart';
@@ -50,8 +51,8 @@ class UserBloc implements Bloc {
       _cloudFirestoreRepository.updateUserPlaceData(place);
 
   //Metodo para construir lista de Places despues de haber obtenido los datos de Plaes de CloudFirestore
-  List<ProfilePlace> buildPlaces(List<DocumentSnapshot> placesListSnapshot) =>
-      _cloudFirestoreRepository.buildPlaces(placesListSnapshot);
+  List<ProfilePlace> buildMyPlaces(List<DocumentSnapshot> placesListSnapshot) =>
+      _cloudFirestoreRepository.buildMyPlaces(placesListSnapshot);
 
   //Metoso para agregar un listener de escucha ante cualquier cambio en la
   //colecion de PLACES
@@ -64,6 +65,15 @@ class UserBloc implements Bloc {
   //Metodo para seleccionar solo los PLaces del usuario logueado
   Stream<QuerySnapshot<Map<String, dynamic>>> myPlacesListStream(String uid) =>
       _cloudFirestoreRepository.myPlacesListStream(uid);
+
+  //Metodo pàra obtener todos los Places de la Base de datos
+  List<Place> buildPlaces(
+          List<DocumentSnapshot> placesListSnapshot, userModel.User user) =>
+      _cloudFirestoreRepository.buildPlaces(placesListSnapshot, user);
+
+  //Metodo para incrementar los like de un Place
+  Future likePlace(Place place, String userId) =>
+      _cloudFirestoreRepository.likePlace(place, userId);
 
   //Metodo para Guardar imagen en la FirebaseStorage
   Future<UploadTask> uploadFile(String path, File image) =>

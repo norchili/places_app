@@ -98,7 +98,7 @@ class CloudFirestoreApi {
   }
 
   //Creamos la lista de Places con los datos obtenidos previamente de CloudFirebase
-  List<ProfilePlace> buildPlaces(List<DocumentSnapshot> placesListSnapshot) {
+  List<ProfilePlace> buildMyPlaces(List<DocumentSnapshot> placesListSnapshot) {
     List<ProfilePlace> profilePlaces = [];
     placesListSnapshot.forEach((DocumentSnapshot place) {
       Map<String, dynamic> data = place.data()! as Map<String, dynamic>;
@@ -109,6 +109,70 @@ class CloudFirestoreApi {
           likes: data['likes'])));
     });
     return profilePlaces;
+  }
+
+  //Metodo para mostrar todos los Places en la pantalla de home
+  //Asi como definir que Places ya se le ha dado like por parte
+  //del usuario loguado
+  List<Place> buildPlaces(
+      List<DocumentSnapshot> placesListSnapshot, modelUser.User user) {
+    List<Place> places = [];
+
+    placesListSnapshot.forEach((DocumentSnapshot place) {
+      bool isLiked = false;
+      //Obtenemos referencia del usuario
+      //DocumentReference refUser = _dataBase.doc("$USERS/${user.userId}");
+
+      Map<String, dynamic> data = place.data()! as Map<String, dynamic>;
+
+      //Guardamos la lista de usuarios que les gusta el lugar
+      List<dynamic>? usersLiked = data['usersLiked'];
+
+      if (usersLiked != null) {
+        usersLiked.forEach((userLiked) {
+          //Guardamos cada elemento y lo seteamos como de tipo DocumentReference
+          DocumentReference userReference = userLiked;
+
+          //Comparamos id del usuario que le dio like con el id del usuario que se encuentra logueado
+          //Si es igual seteamos la variable isLiked = true para controlar el boton de corazon se rellene para este usuario
+          if (userReference.id == user.userId) {
+            isLiked = true;
+          } else {
+            isLiked = false;
+          }
+        });
+      } else {
+        isLiked = false;
+        print("No hay likes de ningun usuario");
+      }
+
+      places.add(Place(
+          id: place.id,
+          likes: data['likes'],
+          name: data['name'],
+          description: data['description'],
+          urlImage: data['urlImage'],
+          liked: isLiked));
+    });
+    return places;
+  }
+
+  //Metodo para incrementar en 1 los likes de un PLACE
+  //Primero se obtiene los likes que tiene actualmente el PLACE utilizando el "idPlace"
+  //Despues se le incrementa en 1 y se guarda en la Base de datos de CloudFirebase
+  Future likePlace(Place place, String userId) async {
+    await _dataBase.collection(PLACES).doc(place.id).get().then((snapshot) {
+      int likes = snapshot.data()!['likes']; //Se obtinen de la BD los likes
+
+      _dataBase.collection(PLACES).doc(place.id).update({
+        //Si se le dio like se incrementa, si se le dio dislike se decrementa
+        'likes': place.liked ? likes + 1 : likes - 1,
+        //Si se le dio like el usuario se guarda su referencia, si le dio dislike el usuario se eleimina la referencia de la lista
+        'usersLiked': place.liked
+            ? FieldValue.arrayUnion([_dataBase.doc("$USERS/$userId")])
+            : FieldValue.arrayRemove([_dataBase.doc("$USERS/$userId")])
+      }); //Se incrementa un like y se guarda en la BD
+    });
   }
 
   //Metodo para seleccionar solo los PLaces del usuario logueado

@@ -1,56 +1,74 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:places_app/Place/model/place.dart';
+import 'package:places_app/User/bloc/bloc_user.dart';
+import 'package:places_app/User/model/user.dart';
 import 'card_image.dart';
 
-class CardImageList extends StatelessWidget {
+class CardImageList extends StatefulWidget {
+  final User user;
+
+  CardImageList({Key? key, required this.user});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CardImageList();
+  }
+}
+
+class _CardImageList extends State<CardImageList> {
+  UserBloc? userBloc;
   @override
   Widget build(BuildContext context) {
-    double _height = 200.0;
-    double _width = 300.0;
-    void onPressedFav() {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Agregaste a tus Favoritos"),
-      ));
-    }
+    userBloc = BlocProvider.of(context);
 
     return Container(
-      //margin: EdgeInsets.only(top: 10.0),
-      height: 350.0,
-      child: ListView(
+        //margin: EdgeInsets.only(top: 10.0),
+        height: 350.0,
+        child: StreamBuilder(
+            stream: userBloc!.placesStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return CircularProgressIndicator();
+                case ConnectionState.waiting:
+                  return CircularProgressIndicator();
+                case ConnectionState.active:
+                  return listViewPlaces(
+                      userBloc!.buildPlaces(snapshot.data!.docs, widget.user));
+                case ConnectionState.done:
+                  return listViewPlaces(
+                      userBloc!.buildPlaces(snapshot.data!.docs, widget.user));
+              }
+            }));
+  }
+
+  Widget listViewPlaces(List<Place> places) {
+    //Metodo para desencadenar las acciones al dar like o dislike con el boton del Heart
+    void setLiked(Place place) {
+      setState(() {
+        place.liked = !place.liked;
+        userBloc!.likePlace(place, widget.user.userId!);
+      });
+    }
+
+    IconData iconDataLiked = Icons.favorite;
+    IconData iconDataLike = Icons.favorite_border;
+    return ListView(
         padding: EdgeInsets.all(25.0),
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          CardImageWithFabIcon(
-              pathImage: "assets/img/beach_palm.jpeg",
-              height: _height,
-              width: _width,
-              iconData: Icons.favorite_border,
-              onPressedFabIcon: onPressedFav),
-          CardImageWithFabIcon(
-              pathImage: "assets/img/mountain.jpeg",
-              height: _height,
-              width: _width,
-              iconData: Icons.favorite_border,
-              onPressedFabIcon: onPressedFav),
-          CardImageWithFabIcon(
-              pathImage: "assets/img/mountain_stars.jpeg",
-              height: _height,
-              width: _width,
-              iconData: Icons.favorite_border,
-              onPressedFabIcon: onPressedFav),
-          CardImageWithFabIcon(
-              pathImage: "assets/img/river.jpeg",
-              height: _height,
-              width: _width,
-              iconData: Icons.favorite_border,
-              onPressedFabIcon: onPressedFav),
-          CardImageWithFabIcon(
-              pathImage: "assets/img/sunset.jpeg",
-              height: _height,
-              width: _width,
-              iconData: Icons.favorite_border,
-              onPressedFabIcon: onPressedFav),
-        ],
-      ),
-    );
+        children: places.map((place) {
+          return CardImageWithFabIcon(
+              pathImage: place.urlImage,
+              height: 200.0,
+              width: 300.0,
+              onPressedFabIcon: () {
+                setLiked(place);
+              },
+              iconData: place.liked ? iconDataLiked : iconDataLike,
+              internet: true);
+        }).toList());
   }
 }
