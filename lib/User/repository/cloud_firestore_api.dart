@@ -143,7 +143,7 @@ class CloudFirestoreApi {
         });
       } else {
         isLiked = false;
-        print("No hay likes de ningun usuario");
+        print("No hay likes de ningun usuario en el Place: ${data['name']}.");
       }
 
       places.add(Place(

@@ -40,11 +40,15 @@ class ButtonsBar extends StatelessWidget {
                           maxWidth: 1280.0,
                           imageQuality: 60)
                       .then((image) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                AddPlaceScreen(image: File(image!.path))));
+                    if (image != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  AddPlaceScreen(image: File(image.path))));
+                    } else {
+                      print("No se tomó ninguna foto");
+                    }
                   }).catchError((onError) {
                     print("Error al tomar la foto: $onError");
                   });

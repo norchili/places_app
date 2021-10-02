@@ -6,7 +6,7 @@ class Place {
   final String name;
   final String description;
   final String urlImage;
-  final int? likes;
+  int likes;
   final String? category;
   final List<User>? usersLiked;
   bool liked;
@@ -16,7 +16,7 @@ class Place {
   Place(
       {Key? key,
       this.id,
-      this.likes,
+      this.likes = 0,
       this.category,
       required this.name,
       required this.description,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -66,6 +67,11 @@ class UserBloc implements Bloc {
   Stream<QuerySnapshot<Map<String, dynamic>>> myPlacesListStream(String uid) =>
       _cloudFirestoreRepository.myPlacesListStream(uid);
 
+  //Metodos para poner escucha al Place sellecionado en la pantalla principal
+  StreamController<Place> placeSelectedStreamController = StreamController();
+  Stream<Place> get placeSelectedStream => placeSelectedStreamController.stream;
+  StreamSink<Place> get placeSelectedSink => placeSelectedStreamController.sink;
+
   //Metodo pàra obtener todos los Places de la Base de datos
   List<Place> buildPlaces(
           List<DocumentSnapshot> placesListSnapshot, userModel.User user) =>
@@ -80,5 +86,7 @@ class UserBloc implements Bloc {
       _firebaseStorageRepository.uploadFile(path, image);
 
   @override
-  void dispose() {}
+  void dispose() {
+    placeSelectedStreamController.close();
+  }
 }
